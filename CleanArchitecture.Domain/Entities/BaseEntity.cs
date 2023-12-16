@@ -8,11 +8,6 @@ namespace CleanArchitecture.Domain.Entities
 {
     public abstract class BaseEntity
     {
-        public BaseEntity()
-        {
-            DateCreated = DateTime.Now;    
-        }
-
         public Guid Id { get; set; }
         public DateTimeOffset DateCreated { get; set; }
         public DateTimeOffset DateUpdated { get; set; }
