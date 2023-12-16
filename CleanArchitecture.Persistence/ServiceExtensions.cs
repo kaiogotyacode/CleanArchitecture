@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CleanArchitecture.Persistence
+namespace CleanArchitecture.Persistence;
+
+public static class ServiceExtensions
 {
-    public class ServiceExtensions
+    public static void ConfigurePersistenceApp(this IServiceCollection services, IConfiguration configuration)
     {
-        public static void ConfigurePersistenceApp(IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddDbContext<DatabaseContext>(db => db.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<IUnitOfWork, UnitOfWork>();  
-            services.AddScoped<IUserRepository, UserRepository>();  
-        }
+        services.AddDbContext<DatabaseContext>(db => db.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IUserRepository, UserRepository>();
     }
 }
+
