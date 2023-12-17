@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.Application.UseCases.CreateUser;
 using CleanArchitecture.Application.UseCases.DeleteUser;
+using CleanArchitecture.Application.UseCases.GetAllUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +30,21 @@ namespace CleanArchitecture.API.Controllers
             }
         }
 
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<IEnumerable<GetAllUserResponse>>> GetAll(CancellationToken cancellationToken)
+        {
+            try
+            {
+                var response = await _mediator.Send(new GetAllUserRequest(), cancellationToken);
+
+                return response is not null ? Ok(response) : NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ErrorMessage = ex.Message });
+            }
+        }
+
         [HttpDelete("Delete")]
         public async Task<ActionResult<DeleteUserResponse>> Delete(DeleteUserRequest request, CancellationToken cancellationToken)
         {
@@ -36,7 +52,7 @@ namespace CleanArchitecture.API.Controllers
             {
                 var response = await _mediator.Send(request, cancellationToken);
 
-                return Ok(response);
+                return response is not null ? Ok(response) : NotFound(request);
             }
             catch (Exception ex)
             {
