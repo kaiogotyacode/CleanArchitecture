@@ -17,9 +17,17 @@ namespace CleanArchitecture.API.Controllers
         [HttpPost("Create")]
         public async Task<ActionResult<CreateUserResponse>> Create(CreateUserRequest request, CancellationToken cancellationToken)
         {
-            var response = await _mediator.Send(request, cancellationToken);
+            try
+            {
+                var response = await _mediator.Send(request, cancellationToken);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ErrorMessage = ex.Message });
+            }
 
-            return Ok(response);
+
         }
 
     }
