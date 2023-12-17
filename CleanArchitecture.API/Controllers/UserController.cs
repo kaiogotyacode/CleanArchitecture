@@ -1,6 +1,7 @@
 ﻿using CleanArchitecture.Application.UseCases.CreateUser;
 using CleanArchitecture.Application.UseCases.DeleteUser;
 using CleanArchitecture.Application.UseCases.GetAllUser;
+using CleanArchitecture.Application.UseCases.UpdateUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,6 +39,21 @@ namespace CleanArchitecture.API.Controllers
                 var response = await _mediator.Send(new GetAllUserRequest(), cancellationToken);
 
                 return response is not null ? Ok(response) : NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ErrorMessage = ex.Message });
+            }
+        }
+
+        [HttpPut("Update")]
+        public async Task<ActionResult<UpdateUserResponse>> Update(UpdateUserRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var response = await _mediator.Send(request, cancellationToken);
+
+                return response is not null ? Ok(response) : NotFound(request);
             }
             catch (Exception ex)
             {
